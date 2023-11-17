@@ -6,82 +6,118 @@
 */
 
 #include <string.h>
+#include <stdlib.h>
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-int x = 34, y = 12;
-int incX = 1, incY = 1;
+#define MAX_LINHAS 30
+#define MAX_COLUNAS 60
 
-void printHello(int nextX, int nextY)
-{
-    screenSetColor(CYAN, DARKGRAY);
-    screenGotoxy(x, y);
-    printf("           ");
-    x = nextX;
-    y = nextY;
-    screenGotoxy(x, y);
-    printf("Julia");
+typedef struct CorpoCobrinha{
+    int x, y;
+    struct CorpoCobrinha* next;
+}CorpoCobrinha;
+
+typedef struct Cobrinha{
+    // int comprimento;
+    CorpoCobrinha* head;
+}Cobrinha;
+
+Cobrinha cobrinha;
+int incX, incY;
+int gameover;
+
+void iniciar_jogo(){
+    cobrinha.head = malloc(sizeof(CorpoCobrinha));
+    cobrinha.head->x = 20;
+    cobrinha.head->y = 20;
+    cobrinha.head->next = NULL;
+    // cobrinha.comprimento = 10;
+    incX = 1;
+    incY = 0;
 }
 
-void printKey(int ch)
-{
+
+void print_cobrinha(){
     screenSetColor(YELLOW, DARKGRAY);
-    screenGotoxy(35, 22);
-    printf("TESTE :");
-
-    screenGotoxy(34, 23);
-    printf("            ");
-    
-    if (ch == 27) screenGotoxy(36, 23);
-    else screenGotoxy(39, 23);
-
-    printf("%d ", ch);
-    while (keyhit())
-    {
-        printf("%d ", readch());
+    CorpoCobrinha* atual = cobrinha.head;
+    while (atual != NULL){
+        screenGotoxy(atual->x, atual->y);
+        printf("˚");
+        atual = atual->next;
     }
 }
 
-int main() 
-{
-    static int ch = 0;
+void cobrinha_andar() {
+    CorpoCobrinha* newHead = malloc(sizeof(CorpoCobrinha));
+    newHead->x = cobrinha.head->x + incX;
+    newHead->y = cobrinha.head->y + incY;
+    newHead->next = cobrinha.head;
+    cobrinha.head = newHead;
 
+    CorpoCobrinha* atual = cobrinha.head;
+    while (atual->next->next != NULL) {
+        atual = atual->next;
+    }
+    CorpoCobrinha* temp = malloc(sizeof(CorpoCobrinha));
+    temp = newHead->next; 
+    newHead->next = newHead->next->next;
+    free(temp);
+}
+
+
+
+
+
+int main(){
+
+    int ch = 0;
     screenInit(1);
     keyboardInit();
-    timerInit(50);
-
-    printHello(x, y);
-    screenUpdate();
-
-    while (ch != 10) //enter
-    {
-        // Handle user input
-        if (keyhit()) 
-        {
+    timerInit(100);
+    iniciar_jogo();
+    while (!gameover){
+        if(keyhit()){
             ch = readch();
-            printKey(ch);
-            screenUpdate();
+            switch (ch){
+                case 'i':
+                    incX = 0;
+                    incY = -1;
+                    break;
+                case 'j':
+                    incX = -1;
+                    incY = 0;
+                    break;
+                case 'k':
+                    incX = 0;
+                    incY = 1;
+                    break;
+                case 'l':
+                    incX = 1;
+                    incY = 0;
+                    break;
+                case 'b':
+                    gameover = 1;
+            }
         }
 
-        // Update game state (move elements, verify collision, etc)
-        if (timerTimeOver() == 1)
-        {
-            int newX = x + incX;
-            if (newX >= (MAXX -strlen("Julia") -1) || newX <= MINX+1) incX = -incX;
-            int newY = y + incY;
-            if (newY >= MAXY-1 || newY <= MINY+1) incY = -incY;
-
-            printKey(ch);
-            printHello(newX, newY);
-
+        if(timerTimeOver() == 1){
+            cobrinha_andar();
+            screenClear();
+            print_cobrinha();
             screenUpdate();
+
         }
     }
-
+    CorpoCobrinha* atual = cobrinha.head;
+    while (atual != NULL){
+        CorpoCobrinha* temp = atual;
+        atual = atual->next;
+        free(temp);
+    }
     keyboardDestroy();
     screenDestroy();
     timerDestroy();
-
     return 0;
 }
