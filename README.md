@@ -1,20 +1,28 @@
 # cli-lib
-Command Line Interface library, for developing CLI applications and games in C. It has functions to access keyboard, screen and manage timing tasks.
+Command Line Interface library(CLI). Biblioteca para desenvolvimento de jogos em C. Possui funções para acessar 
+o teclado, a tela e gerenciar tarefas de temporização.
 
-## Requirements
-- This library works with the follwing OS:
+## Requisitos
+- Essa biblioteca funciona nos seguintes sistemas operacionais:
    - Linux based (Ubuntu, etc)
    - MacOS
-- It is necessary to have GCC installed.
+- É necesaário ter o GCC instalado na sua máquina. 
 
-## Usage 
-The file `main.c` has an example of how to use the Keyboard, Screen nd Timer functions. 
+- Para saber se você tem o GCC instalado na sua máquina basta rodar o seguinte comando no terminal:
+   - gcc --version
 
-To build this example via command line, just switch to library root directory and type the following command:
+
+## Uso
+Na pasta src temos o `main.c`, nesse arquivo temos toda a lógica para funcionar o jogo. 
+
+Para compilar este exemplo via linha de comando, basta mudar para o diretório raiz da biblioteca e digitar o seguinte comando:
 ```
-$ gcc ./src/*.c -I./include -o cli-lib-example
+$ gcc ./src/*.c -I./include -o cli-lib-jogo-cobrinha
 ```
+Ao rodar esse comando, aparecerá um arquico cli-lib-jogo-cobrinha. Rode o comando ./cli-lib-jogo-cobrinha no terminal e jogo iniciará. Usaremos as teclas i, j, k ,l para movimentar a cobrinha. 
+i = para cima
+j = para esquerda
+k = para baixo
+l = para direita
 
-To use this library to create your own apps, simply add source and header files to your project and compile it together with your own code, 
-replacing the main.c file to your own.
-
+Para usar esta biblioteca para criar seus próprios aplicativos, basta adicionar os arquivos de origem e cabeçalho ao seu projeto e compilá-los junto com seu próprio código, substituindo o arquivo main.c pelo seu próprio.
