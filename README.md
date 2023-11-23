@@ -6,7 +6,7 @@ o teclado, a tela e gerenciar tarefas de temporização.
 - Essa biblioteca funciona nos seguintes sistemas operacionais:
    - Linux based (Ubuntu, etc)
    - MacOS
-- É necesaário ter o GCC instalado na sua máquina. 
+- É necessário ter o GCC instalado na sua máquina. 
 
 - Para saber se você tem o GCC instalado na sua máquina basta rodar o seguinte comando no terminal:
    - gcc --version
@@ -19,8 +19,9 @@ Para compilar este exemplo via linha de comando, basta mudar para o diretório r
 ```
 $ gcc ./src/*.c -I./include -o cli-lib-jogo-cobrinha
 ```
-Ao rodar esse comando, aparecerá um arquico cli-lib-jogo-cobrinha. Rode o comando ./cli-lib-jogo-cobrinha no terminal e jogo iniciará. Usaremos as teclas i, j, k ,l para movimentar a cobrinha. 
+Ao rodar esse comando, aparecerá um arquico cli-lib-jogo-cobrinha. Rode o comando ./cli-lib-jogo-cobrinha no terminal e jogo iniciará. Usaremos as teclas i, j, k ,l para movimentar a cobrinha e a tecla b quando quiser parar o jogo. 
 i = para cima
 j = para esquerda
 k = para baixo
 l = para direita
+b = parar o jogo
