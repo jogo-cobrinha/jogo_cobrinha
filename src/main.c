@@ -93,8 +93,8 @@ void checa_colisao() {
 
   if (cobrinha.head->x == comida_x && cobrinha.head->y == comida_y) {
     pontos++;
-    comida_x = (rand() % (MAX_COLUNAS-2)) + 2;
-    comida_y = (rand() % (MAX_LINHAS-2)) + 2;
+    comida_x = (rand() % (MAX_COLUNAS-2)) + 1;
+    comida_y = (rand() % (MAX_LINHAS-2)) + 1;
     CorpoCobrinha *novo_segmento = malloc(sizeof(CorpoCobrinha));
     novo_segmento->x = cobrinha.head->x;
     novo_segmento->y = cobrinha.head->y;
