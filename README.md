@@ -24,5 +24,3 @@ i = para cima
 j = para esquerda
 k = para baixo
 l = para direita
-
-Para usar esta biblioteca para criar seus próprios aplicativos, basta adicionar os arquivos de origem e cabeçalho ao seu projeto e compilá-los junto com seu próprio código, substituindo o arquivo main.c pelo seu próprio.
