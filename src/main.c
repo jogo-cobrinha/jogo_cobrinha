@@ -16,37 +16,34 @@ int comida_x, comida_y;
 #define MAX_LINHAS 24
 #define MAX_COLUNAS 60 
 
-typedef struct CorpoCobrinha { 
-  int x, y; 
-  char corpo;
-  struct CorpoCobrinha *next; 
-} CorpoCobrinha; 
-
 typedef struct Cobrinha { 
-  int comprimento; 
-  CorpoCobrinha *head; 
+  int x, y; 
+  struct Cobrinha *next; 
+  struct Cobrinha *head; 
 } Cobrinha; 
+
+
 
 Cobrinha cobrinha; 
 int incX, incY, pontos, gameover;
 
 
+
 void iniciar_jogo() { 
-  cobrinha.head = malloc(sizeof(CorpoCobrinha)); 
+  cobrinha.head = malloc(sizeof(Cobrinha)); 
   cobrinha.head->x = 21; 
   cobrinha.head->y = 21; 
   cobrinha.head->next = NULL; 
-  cobrinha.comprimento = 1; 
   incX = 1; 
   incY = 0; 
   gameover = 0; 
-  comida_x = (rand() % (MAX_COLUNAS-2)) + 1;
-  comida_y = (rand() % (MAX_LINHAS-2)) + 1;
+  comida_x = (rand() % (MAX_COLUNAS - 2)) + 1;
+  comida_y = (rand() % (MAX_LINHAS - 2)) + 1;
 } 
 
 void print_cobrinha() { 
   screenSetColor(GREEN, DARKGRAY); 
-  CorpoCobrinha *atual = cobrinha.head; 
+  Cobrinha *atual = cobrinha.head; 
   while (atual != NULL) { 
     screenGotoxy(atual->x, atual->y); 
     printf("■"); 
@@ -55,18 +52,17 @@ void print_cobrinha() {
 } 
 
 void cobrinha_andar() { 
-  CorpoCobrinha *newHead = malloc(sizeof(CorpoCobrinha)); 
+  Cobrinha *newHead = malloc(sizeof(Cobrinha)); 
   newHead->x = cobrinha.head->x + incX; 
   newHead->y = cobrinha.head->y + incY; 
   newHead->next = cobrinha.head; 
   cobrinha.head = newHead; 
-  CorpoCobrinha *atual = cobrinha.head; 
+  Cobrinha *atual = cobrinha.head; 
   while (atual->next->next != NULL) { 
       atual = atual->next; 
   } 
   free(atual->next); 
-  atual->next = NULL;  
-  cobrinha.comprimento++; 
+  atual->next = NULL;
 } 
 
 void mostrar_comida() { 
@@ -75,6 +71,7 @@ void mostrar_comida() {
   printf("•"); 
 } 
 
+
 void checa_colisao() {
   if (cobrinha.head->x >= MAX_COLUNAS || cobrinha.head->x <= 1 ||
     cobrinha.head->y >= MAX_LINHAS || cobrinha.head->y <= 1) {
@@ -82,7 +79,7 @@ void checa_colisao() {
     return;
   }
 
-  CorpoCobrinha *atual = cobrinha.head->next;
+  Cobrinha *atual = cobrinha.head->next;
   while (atual != NULL) {
     if (cobrinha.head->x == atual->x && cobrinha.head->y == atual->y) {
       gameover = 1;
@@ -95,16 +92,15 @@ void checa_colisao() {
     pontos++;
     comida_x = (rand() % (MAX_COLUNAS-2)) + 1;
     comida_y = (rand() % (MAX_LINHAS-2)) + 1;
-    CorpoCobrinha *novo_segmento = malloc(sizeof(CorpoCobrinha));
+    Cobrinha *novo_segmento = malloc(sizeof(Cobrinha));
     novo_segmento->x = cobrinha.head->x;
     novo_segmento->y = cobrinha.head->y;
-    CorpoCobrinha *ultimo_segmento = cobrinha.head;
 
+    Cobrinha *ultimo_segmento = cobrinha.head;
     while (ultimo_segmento->next != NULL) {
         ultimo_segmento = ultimo_segmento->next;
     }
     ultimo_segmento->next = novo_segmento;
-    cobrinha.comprimento++;
     cobrinha.head->x += incX; 
     cobrinha.head->y += incY;
     print_cobrinha();
@@ -172,12 +168,10 @@ int main() {
   srand(time(NULL));
   screenInit(1); 
   keyboardInit(); 
-  timerInit(100); 
+  timerInit(150); 
   iniciar_jogo(); 
 
-
   while (!gameover) { 
-    screenClear(); 
     if (keyhit()) { 
       ch = readch(); 
       switch (ch) { 
@@ -236,20 +230,20 @@ int main() {
     } 
 
     if (timerTimeOver() == 1) { 
+      screenClear();
       cobrinha_andar(); 
       checa_colisao();
       print_borda();
       mostrar_comida();
       print_cobrinha(); 
       screenUpdate(); 
-      usleep(100000); 
     } 
   } 
   screenClear();
   print_game_over();
-  CorpoCobrinha *atual = cobrinha.head; 
+  Cobrinha *atual = cobrinha.head; 
   while (atual != NULL) { 
-    CorpoCobrinha *temp = atual; 
+    Cobrinha *temp = atual; 
     atual = atual->next; 
     free(temp); 
   } 
